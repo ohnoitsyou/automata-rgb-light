@@ -1,0 +1,10 @@
+{
+  "name": "lights",
+  "description": "Plugin to control lights!",
+  "version": "1.0.0",
+  "private": "true",
+  "main": "lights.js",
+  "dependencies": {
+    "express": "^4.12.3"
+  }
+}
