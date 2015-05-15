@@ -26,6 +26,12 @@ var Lights = function() {
     this.router.get("/", function(req, res) {
       res.send("Lights!");
     });
+    this.router.get("/on", function(req, res) {
+      res.send("Lights on!");
+    });
+    this.router.get("/off", function(req, res) {
+      res.send("Lights off!");
+    });
     debug("[LoadRoutes] Finishing");
     return this.router;
   };
