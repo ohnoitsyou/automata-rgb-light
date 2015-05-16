@@ -53,7 +53,7 @@ var Lights = function() {
       var device = req.params.device;
       debug("URL: %s", self.baseURI + "/api/spark/sendCommand/" + device + "/ts/0");
 
-      request(self.baseURI + "/api/spark/sendCommand/" + device + "/ts", function(e, r, b) {
+      request(self.baseURI + "/api/spark/sendCommand/" + device + "/ts/0", function(e, r, b) {
         if(!e && r.statusCode == 200) {
           debug("Success");
         } else {
@@ -61,6 +61,18 @@ var Lights = function() {
         }
       });
       res.send("Lights toggled!");
+    });
+    this.router.get("/ro/:device/:routine", function(req, res) {
+      var device = req.params.device;
+      var routine = req.params.routine;
+      request(self.baseURI + "/api/spark/sendCommand/" + device + "/ro/" + routine, function(e, r, b) {
+        if(!e && r.statusCode == 200) {
+          debug("Success");
+        } else {
+          debug("Not Success: %s", e);
+        }
+        res.send("Routine Changed!");
+      });
     });
     debug("[LoadRoutes] Finishing");
     return this.router;
