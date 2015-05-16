@@ -15,11 +15,8 @@ var Lights = function() {
   };
   this.initilize = function() {
     debug("[Initilize] Starting");
-    // here is where the module should login to spark
-    // What would make this better would be a spark module
-    //  so that any other plugins that utilize the spark api
-    //  don't have to each login.
-    //  Shared credentials
+    // The module doesn't need to handle login
+    // Login is done as part of the spark plugin init
     debug("[Initilize] Finishing");
     return true;
   };
@@ -27,27 +24,23 @@ var Lights = function() {
     debug("[LoadRoutes] Starting");
     var self = this;
     this.router.get("/", function(req, res) {
-      request("/api/spark/sendCommand/lights/off", function(e, r, b) {
-        if(!e && r.statusCode == 200) {
-          debug("Success");
-        } else {
-          debug("Not Success: %s", e);
-        }
-      });
       res.send("Lights!");
     });
-    this.router.get("/on", function(req, res) {
-      request(self.baseURI + "/api/spark/sendCommand/lights/on", function(e, r, b) {
+    this.router.get("/on/:device", function(req, res) {
+      var device = req.params.device;
+      request(self.baseURI + "/api/spark/sendCommand/" + device + "/on", function(e, r, b) {
         if(!e && r.statusCode == 200) {
           debug("Success");
+          res.send(b);
         } else {
           debug("Not Success: %s", e);
+          res.send(b);
         }
-      res.send("Lights on!");
       });
     });
-    this.router.get("/off", function(req, res) {
-      request(self.baseURI + "/api/spark/sendCommand/lights/off", function(e, r, b) {
+    this.router.get("/off/:device", function(req, res) {
+      var device = req.params.device;
+      request(self.baseURI + "/api/spark/sendCommand/" + device + "/off", function(e, r, b) {
         if(!e && r.statusCode == 200) {
           debug("Success");
         } else {
@@ -55,6 +48,19 @@ var Lights = function() {
         }
       });
       res.send("Lights off!");
+    });
+    this.router.get("/ts/:device", function(req, res) {
+      var device = req.params.device;
+      debug("URL: %s", self.baseURI + "/api/spark/sendCommand/" + device + "/ts/0");
+
+      request(self.baseURI + "/api/spark/sendCommand/" + device + "/ts", function(e, r, b) {
+        if(!e && r.statusCode == 200) {
+          debug("Success");
+        } else {
+          debug("Not Success: %s", e);
+        }
+      });
+      res.send("Lights toggled!");
     });
     debug("[LoadRoutes] Finishing");
     return this.router;
