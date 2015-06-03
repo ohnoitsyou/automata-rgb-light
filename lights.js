@@ -8,7 +8,6 @@ var Lights = function() {
   this.version = "0.1.0";
   this.requires = [{"spark": "0.1.0"}];
   this.router = express.Router();
-  this.baseURI = "http://automata.ohnoitsyou.net";
   this.routines = ['off','random','fade','static'];
   //this.spark;
   this.load = function(options) {
@@ -33,7 +32,7 @@ var Lights = function() {
       var device = req.params.device;
       var routine = Math.floor(Math.random() * (4 - 1)) + 1;
       debug(routine);
-      request(self.baseURI + "/api/spark/sendCommand/" + device + "/ro/" + routine, function(e, r, b) {
+      request(res.locals.baseURI + "/api/spark/sendCommand/" + device + "/ro/" + routine, function(e, r, b) {
         if(!e && r.statusCode == 200) {
           debug("Success");
           res.send(b);
@@ -45,7 +44,7 @@ var Lights = function() {
     });
     this.router.get("/:device/off", function(req, res) {
       var device = req.params.device;
-      request(self.baseURI + "/api/spark/sendCommand/" + device + "/ro/0", function(e, r, b) {
+      request(res.locals.baseURI + "/api/spark/sendCommand/" + device + "/ro/0", function(e, r, b) {
         if(!e && r.statusCode == 200) {
           debug("Success");
         } else {
@@ -56,9 +55,9 @@ var Lights = function() {
     });
     this.router.get("/:device/ts", function(req, res) {
       var device = req.params.device;
-      debug("URL: %s", self.baseURI + "/api/spark/sendCommand/" + device + "/ts/0");
+      debug("URL: %s", res.locals.baseURI + "/api/spark/sendCommand/" + device + "/ts/0");
 
-      request(self.baseURI + "/api/spark/sendCommand/" + device + "/ts/0", function(e, r, b) {
+      request(res.locals.baseURI + "/api/spark/sendCommand/" + device + "/ts/0", function(e, r, b) {
         if(!e && r.statusCode == 200) {
           debug("Success");
         } else {
@@ -70,7 +69,7 @@ var Lights = function() {
     this.router.get("/:device/ro/:routine", function(req, res) {
       var device = req.params.device;
       var routine = req.params.routine;
-      request(self.baseURI + "/api/spark/sendCommand/" + device + "/ro/" + routine, function(e, r, b) {
+      request(res.locals.baseURI + "/api/spark/sendCommand/" + device + "/ro/" + routine, function(e, r, b) {
         if(!e && r.statusCode == 200) {
           debug("Success");
         } else {
@@ -81,7 +80,7 @@ var Lights = function() {
     });
     this.router.get("/render", function(req, res) {
       debug("[Render] Rendering");
-      res.sendFile(path.join(__dirname + '/views/lights.html'));
+      res.send('/views/lights.html');
     });
     debug("[LoadRoutes] Finishing");
     return this.router;
