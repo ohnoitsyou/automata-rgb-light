@@ -38,15 +38,13 @@ var Lights = function() {
     this.router.get("/:device/on", function(req, res) {
       var device = req.params.device;
       var routine = Math.floor(Math.random() * (4 - 1)) + 1;
-      debug(routine);
       request(res.locals.baseURI + "/api/spark/sendCommand/" + device + "/ro/" + routine, function(e, r, b) {
         if(!e && r.statusCode == 200) {
           debug("Success");
-          res.send(b);
         } else {
           debug("Not Success: %s", e);
-          res.send(b);
         }
+        res.send("Lights on!");
       });
     });
     this.router.get("/:device/off", function(req, res) {
@@ -58,13 +56,10 @@ var Lights = function() {
           debug("Not Success: %s", e);
         }
       });
-      debug("[Render] Rendering");
       res.send("Lights off!");
     });
     this.router.get("/:device/ts", function(req, res) {
       var device = req.params.device;
-      debug("URL: %s", res.locals.baseURI + "/api/spark/sendCommand/" + device + "/ts/0");
-
       request(res.locals.baseURI + "/api/spark/sendCommand/" + device + "/ts/0", function(e, r, b) {
         if(!e && r.statusCode == 200) {
           debug("Success");
@@ -88,9 +83,7 @@ var Lights = function() {
     });
     this.router.get("/render", function(req, res) {
       var viewPath = res.locals.pluginDir + "/" + path.relative(res.locals.pluginDir, self.viewsFolder);
-      debug(viewPath);
       res.locals.app.render(viewPath + "/lights", function(err, html) {
-        debug(html);
         res.send(html);
       });
     });
