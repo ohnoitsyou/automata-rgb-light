@@ -31,7 +31,6 @@ var Lights = function() {
   this.loadRoutes = function(iapp) {
     debug("[LoadRoutes] Starting");
     var self = this;
-    var gApp = iapp;
     this.router.get("/", function(req, res) {
       res.send("Lights!");
     });
@@ -83,7 +82,7 @@ var Lights = function() {
     });
     this.router.get("/render", function(req, res) {
       var viewPath = res.locals.pluginDir + "/" + path.relative(res.locals.pluginDir, self.viewsFolder);
-      res.locals.app.render(viewPath + "/lights", function(err, html) {
+      res.locals.app.render(viewPath + "/lights",{layout: null}, function(err, html) {
         res.send(html);
       });
     });
@@ -92,43 +91,42 @@ var Lights = function() {
   };
   this.registerStaticFolders = function(pluginDir) {
     debug("[RegisterStatics] Starting");
-    debug("[RegisterStatics] Finishing");
     var folders = [this.stylesFolder, this.scriptsFolder];
     folders = folders.map(function(folder) {
       return path.basename(pluginDir) + "/" +  path.relative(pluginDir, folder);
     });
+    debug("[RegisterStatics] Finishing");
     return folders;
   };
   this.registerStyles = function(pluginDir) {
     debug("[RegisterStyles] Starting");
-    var files = [];
+    var files = [], fileList = [],
+        filePath = path.join(path.basename(pluginDir), path.relative(pluginDir, this.stylesFolder));
     try {
-      var fileList = fs.readdirSync(this.stylesFolder);
-      files = fileList.map(function(file) {
-        var filePath = path.basename(pluginDir) + "/" + path.relative(pluginDir, this.stylesFolder);
-        debug("[RegisterStyles] Path: %s", filePath + "/" + file);
-        return filePath + "/" + file;
-      }, this);
+      fileList = fs.readdirSync(this.stylesFolder);
     } catch(e) {
       debug("[RegisterStyles] Problem: %s", e);
     }
+    files = fileList.map(function(file) {
+      debug("[RegisterStyles] Found file: %s", file);
+      return path.join(filePath, file);
+    });
     debug("[RegisterStyles] Finishing");
     return files;
   };
   this.registerScripts = function(pluginDir) {
     debug("[RegisterScripts] Starting");
-    var files = [];
+    var files = [], fileList = [],
+        filePath = path.join(path.basename(pluginDir), path.relative(pluginDir, this.scriptsFolder));
     try {
-      var fileList = fs.readdirSync(this.scriptsFolder);
-      files = fileList.map(function(file) {
-        debug("[RegisterScripts] Found script: %s", file);
-        var filePath = path.basename(pluginDir) + "/" +  path.relative(pluginDir, this.scriptsFolder);
-        debug("[RegisterScripts] Path: %s", filePath + "/" + file);
-        return filePath + "/" + file;
-      }, this);
+      fileList = fs.readdirSync(this.scriptsFolder);
     } catch(e) {
       debug("[RegisterScripts] Problem: %s", e);
     }
+    files = fileList.map(function(file) {
+      debug("[RegisterScripts] Found file: %s", file);
+      return path.join(filePath, file);
+    });
     debug("[RegisterScripts] Finishing");
     return files;
   };
