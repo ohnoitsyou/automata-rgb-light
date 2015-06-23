@@ -1,32 +1,19 @@
 function lightsOn() {
-  new Ajax.Request("/api/lights/oniy-lights/on", {
-    method : "get",
-    onSuccess: function(data) {
-      console.log(data.responseText);
-    }
-  });
+  $.ajax("/api/lights/oniy-lights/on", { method : "get" })
+    .done(updateResponse);
 }
 function lightsOff() {
-  new Ajax.Request("/api/lights/oniy-lights/off", {
-    method : "get",
-    onSuccess: function(data) {
-      console.log(data.responseText);
-    }
-  });
+  $.ajax("/api/lights/oniy-lights/off", { method : "get" })
+    .done(updateResponse);
 }
 function toggleSilent() {
-  new Ajax.Request("/api/lights/oniy-lights/ts", {
-    method: "get",
-    onSuccess: function(data) {
-      console.log(data.responseText);
-    }
-  });
+  $.ajax("/api/lights/oniy-lights/ts", { method : "get" })
+    .done(updateResponse);
 }
 function setMode(mode) {
-  new Ajax.Request("/api/lights/oniy-lights/ro/" + mode, {
-    method: "get",
-    onSuccess: function(data) {
-      console.log(data.responseText);
-    }
-  });
+  $.ajax("/api/lights/oniy-lights/ro/" + mode, { method : "get" })
+    .done(updateResponse);
+}
+function updateResponse(data, status, jqXHR) {
+  $("#llghtsResponse").html(data);
 }
