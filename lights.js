@@ -80,6 +80,18 @@ var Lights = function() {
         res.send("Routine changed to " + self.routines[routine] + "!");
       });
     });
+    this.router.get("/:device/co/:color", function(req, res) {
+      var device = req.params.device;
+      var color = req.params.color;
+      request(res.locals.baseURI + "/api/spark/sendCommand/" + device + "/co/" + color, function(e, r, b) {
+        if(!e && r.statusCode == 200) {
+          debug("Success");
+        } else {
+          debug("Not Success: %s", e);
+        }
+        res.send("Color set to " + color);
+      });
+    });
     this.router.get("/render", function(req, res) {
       var viewPath = res.locals.pluginDir + "/" + path.relative(res.locals.pluginDir, self.viewsFolder);
       res.locals.app.render(viewPath + "/lights",{layout: null}, function(err, html) {
