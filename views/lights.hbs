@@ -1,17 +1,23 @@
 <div class="lights-plugin">
-<!-- <h1>Loaded from the module views</h1> -->
-<input type="button" onClick="lightsOff();" value="Lights off" />
-<input type="button" onClick="lightsOn();"  value="Lights on" />
-<input type="button" onClick="toggleSilent();" value="Toggle silent" />
-<input type="button" onClick="setMode(0);" value="Set mode Off" />
-<input type="button" onClick="setMode(1);" value="Set mode Random" />
-<input type="button" onClick="setMode(2);" value="Set mode Fade" />
-<input type="button" onClick="setMode(3);" value="Set mode Static" />
+<fieldset>
+  <legend>Master</legend>
+  <input type="button" onClick="Lights.lightsOff();" value="Lights off" />
+  <input type="button" onClick="Lights.lightsOn();"  value="Lights on" />
+  <input type="button" onClick="Lights.toggleSilent();" value="Toggle silent" />
+</fieldset>
+<fieldset>
+  <legend>Modes</legend>
+  <input type="button" onClick="Lights.setMode(0);" value="Set mode Off" />
+  <input type="button" onClick="Lights.setMode(1);" value="Set mode Random" />
+  <input type="button" onClick="Lights.setMode(2);" value="Set mode Fade" />
+  <input type="button" onClick="Lights.setMode(3);" value="Set mode Static" />
 <br />
-<input id="rValue" placeholder="Red" name="Red">
-<input id="gValue" placeholder="Green" name="Green">
-<input id="bValue" placeholder="Blue" name="Blue">
-<input type="button" onClick="setColor();" value="Set static color" />
 <br />
+<input id="rValue" placeholder="Red" type="number" name="Red">
+<input id="gValue" placeholder="Green" type="number" name="Green">
+<input id="bValue" placeholder="Blue" type="number" name="Blue">
+<br />
+<input type="button" onClick="Lights.setColor();" value="Set static color" />
+</fieldset>
 <div id="lightsResponse"></div>
 </div>
