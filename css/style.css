@@ -1,0 +1,13 @@
+#rValue {
+  background-color: #ff0000;
+}
+#gValue {
+  background-color: #00ff00;
+}
+#bValue {
+  background-color: #0000ff;
+}
+
+fieldset legend {
+  padding-top: 10px;
+}
