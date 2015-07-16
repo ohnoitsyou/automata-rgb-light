@@ -1,5 +1,10 @@
 var Lights = (function() {
+  var lights_io = io("/lights");
+  lights_io.on('connection', function(socket) {
+    console.log('lights connected');
+  });
   var ajaxOpt = {method:"get"};
+  var devStatus = false;
   return {
     lightsOn: function() {
       $.ajax("/api/lights/oniy-lights/on", ajaxOpt)
@@ -32,6 +37,33 @@ var Lights = (function() {
     },
     updateResponse: function(data, status, jqXHR) {
       $("#lightsResponse").html(data);
+    },
+    getLightsStatus: function() {
+      var self = this;
+      $.ajax("/api/lights/oniy-lights/status")
+        .done(function(data, status, jqXHR) {
+          console.log(typeof data);
+          if(["true","false","unknown"].indexOf(data) !== -1) {
+            devStatus = data;
+          } else {
+            devStatus = "unknown";
+          }
+          self.setLightsStatus();
+        });
+    },
+    setLightsStatus: function() {
+      console.log("setting status");
+      console.log(devStatus);
+      if(devStatus === "true") {
+        $("#lightsStatus").html("Connected");
+      } else if(devStatus === "false") {
+        $("#lightsStatus").html("Disconnected");
+      } else {
+        $("#lightsStatus").html("unknown");
+      }
     }
   }
 })();
+Lights.getLightsStatus();
+// refresh once a minute
+var getLightsStatusTimeout = setTimeout(Lights.getLightsStatus,60000);

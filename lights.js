@@ -92,6 +92,16 @@ var Lights = function() {
         res.send("Color set to " + color);
       });
     });
+    this.router.get("/:device/status", function(req, res) {
+      var device = req.params.device;
+      request(res.locals.baseURI + "/api/spark/deviceStatus/" + device, function(e, r, b) {
+        if(!e && r.statusCode == 200) {
+          res.send(b);
+        } else {
+          res.send("unknown");
+        }
+      });
+    });
     this.router.get("/render", function(req, res) {
       var viewPath = res.locals.pluginDir + "/" + path.relative(res.locals.pluginDir, self.viewsFolder);
       res.locals.app.render(viewPath + "/lights",{layout: null}, function(err, html) {
